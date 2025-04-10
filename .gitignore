@@ -10,7 +10,7 @@ logs/
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
-
+mysql.log
 # OS-specific files
 .DS_Store
 Thumbs.db
