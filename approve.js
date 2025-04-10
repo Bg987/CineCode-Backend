@@ -34,12 +34,23 @@ router.get("/MFApprovence", (req, res) => {
 })
 ///AOrD - approve or disapprove
 router.post("/AOrD", (req, res) => {
+    const Cookie = req.headers.cookie;
+    if (!Cookie) {
+        return res.status(400).json({ error: "unauthorized user" });
+    }
+    const token = Cookie.split('=')[1];
+    const decoded = jwt.verify(token, secretKey);
+    const AdminId = decoded.id;
+    const role = decoded.role;
+    if (role !== 'admin' || AdminId !== 'Bg@1234') {
+        return res.status(400).json({ error: "unauthorized" });
+    }
     const { movieId, status } = req.body;
 
     if (status === -1) {
         // Delete the movie if status is -1
         const deleteSql = "DELETE FROM movies WHERE Mid = ?";
-        const filePath = `C:/Users/HP/SE/data/movies/${movieId}.jpg`; 
+        const filePath = `C:/Users/HP/SE/data/movies/${movieId}.jpg`;
         connection.query(deleteSql, [movieId], (err, results) => {
             if (err) {
                 console.log(err);

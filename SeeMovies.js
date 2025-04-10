@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
-const db = require('./db'); // Your DB connection file
-const path = require('path');
+const db = require('./db'); 
+
 
 // Serve static images
 router.use('/images', express.static("C:/Users/HP/SE/data/movies"));
