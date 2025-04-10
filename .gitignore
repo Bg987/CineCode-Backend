@@ -1,6 +1,6 @@
 # Node modules
 node_modules/
-logFiles
+logFiles/
 # Environment variables
 .env
 
