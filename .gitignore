@@ -1,0 +1,31 @@
+# Node modules
+node_modules/
+logFiles
+# Environment variables
+.env
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+
+# Optional: Ignore database files or uploads if stored locally
+data/
+uploads/
+tmp/
+
+# VSCode settings (optional)
+.vscode/
+
+# Coverage reports
+coverage/
+
+# Build outputs (if any)
+dist/
+build/

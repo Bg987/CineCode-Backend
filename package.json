@@ -1,0 +1,40 @@
+{
+  "name": "movieproject",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "start-xampp": "start /B C:\\xampp\\xampp_start.exe > xampp.log 2>&1",
+    "start-mysql": "start /B C:\\xampp\\mysql\\bin\\mysqld.exe > mysql.log 2>&1",
+    "start-node": "node index.js",
+    "start-db": "concurrently \"npm run start-xampp\" \"npm run start-mysql\"",
+    "start": "npm run start-node",
+    "stop-xampp": "cmd /C taskkill /F /IM httpd.exe",
+    "stop-mysql": "cmd /C taskkill /F /IM mysqld.exe",
+    "stop": "npx concurrently \"npm run stop-xampp\" \"npm run stop-mysql\""
+  },
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "bcrypt": "^5.1.1",
+    "child_process": "^1.0.2",
+    "concurrently": "^9.1.2",
+    "cookie-parser": "^1.4.7",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.21.1",
+    "express-fileupload": "^1.5.1",
+    "fileupload": "^0.2.2",
+    "formidable": "^3.5.2",
+    "fs": "^0.0.1-security",
+    "http": "^0.0.1-security",
+    "jsonwebtoken": "^9.0.2",
+    "multer": "^1.4.5-lts.1",
+    "mysql2": "^3.12.0",
+    "nodemailer": "^6.9.16",
+    "nodeman": "^1.1.2",
+    "socket.io": "^4.8.1",
+    "socket.io-client": "^4.8.1",
+    "uuid": "^11.0.2"
+  }
+}
