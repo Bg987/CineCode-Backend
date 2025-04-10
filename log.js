@@ -3,7 +3,7 @@ const fs = require("fs");
 function logUser(str) {
     const finStr = str + " " + timeFetch();
     try {
-        fs.appendFileSync("logFiles/logUser.txt", finStr);
+        fs.appendFileSync("logs/logUser.txt", finStr);
         return 0;
     }
     catch (err) {
@@ -13,7 +13,7 @@ function logUser(str) {
 function logAdmin(str) {
     const finStr = str + " " + timeFetch();
     try {
-        fs.appendFileSync("logFiles/logAdmin.txt", finStr);
+        fs.appendFileSync("logs/logAdmin.txt", finStr);
         return 0;
     }
     catch (err) {
