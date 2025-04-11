@@ -8,26 +8,27 @@ const router = express.Router();
 const log = require("./log");
 
 router.post("/AddMovie", async (req, res) => {
-    //console.log(req.body);
-    let bool, by;
-    if (!req.body.AOrU) {
-        res.status(500).json({ message: "error contact developer" });
+    const Cookie = req.headers.cookie;
+    if (!Cookie) {
+        return res.status(400).json({ error: "unauthorized user" });
     }
+    const token = Cookie.split('=')[1];
+    const decoded = jwt.verify(token, secretKey);
+    const Id = decoded.id;
+    const role = decoded.role;//admin or user
+    let bool, by;
     //condition for admin enter movie
-    if (req.body.AOrU === 'Bg@1234') {
+    if (role === 'admin') {
         bool = true;//approved true in database
         by = "Admin";
     }
     //if user enter movie details
-    else {
+    else if (role === 'user') {
         bool = false;
-        const userCookie = req.headers.cookie;
-        if (!userCookie) {
-            return res.status(400).json({ error: "unauthorized user" });
-        }
-        const token = userCookie.split('=')[1];
-        const decoded = jwt.verify(token, secretKey);
-        by = decoded.id;
+        by = Id;
+    }
+    else {
+        return res.status(400).json({ error: "bad request" });
     }
     const movieData = {
         movieName: req.body.name,
@@ -74,13 +75,16 @@ router.post("/AddMovie", async (req, res) => {
                     }
                     const logFilestr = "\nMOVIE ADD - " + values[0] + " " + values[1] + " " + values[2] + " By " + by;
                     //  dash.emitDashboardData();
-                    if (by === "Admin") {
+                    if (role === "admin") {
                         log.logAdmin(logFilestr);
                         res.status(201).json({ message: "Movie details saved succesfully " });
                     }
-                    else {
+                    else if (role === "user") {
                         log.logUser(logFilestr);
                         res.status(201).json({ message: "Movie details send Admin For Approvance" });
+                    }
+                    else {
+                        res.status(500).json({ message: "internal server error" });
                     }
                 });
             } else {
