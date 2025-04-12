@@ -4,8 +4,9 @@ module.exports = (server) => {
     const db = require('./db');
     const io = new Server(server, {
         cors: {
-            origin: 'https://cine-code-frontend.vercel.app/', //frontend
+            origin: 'https://cine-code-frontend.vercel.app', //frontend
             methods: ['GET', 'POST'],
+            withCredentials: true, 
         },
     });
     io.on('connection', (socket) => {
