@@ -27,9 +27,14 @@ router.get("/logoutUser", async (req, res) => {
             // Log the user logout
             const logFilestr = "\nLOGOUT - " + userId;
             log.logUser(logFilestr);
-
-            // Clear cookie
-            res.clearCookie('token');
+            //for production
+            res.clearCookie("token", {
+                httpOnly: true,
+                secure: true, // Ensure it's true if using HTTPS
+                sameSite: "None" // Important for cross-origin requests
+            });
+            //for test
+            //res.clearCookie('token');
             res.status(200).send("Logout successful");
         });
     } catch (err) {
@@ -41,7 +46,14 @@ router.get("/logoutUser", async (req, res) => {
 router.get("/logoutAdmin", (req, res) => {
     try {
         const logFilestr = "\nLOGOUT - ";
-        res.clearCookie('token');
+        //for production
+        res.clearCookie("token", {
+            httpOnly: true,
+            secure: true, // Ensure it's true if using HTTPS
+            sameSite: "None" // Important for cross-origin requests
+        });
+        //for test
+        //res.clearCookie('token');
         log.logAdmin(logFilestr);
         res.status(200).json("ok");
     }

@@ -13,7 +13,7 @@ router.use(cookieParser());
 
 // Single Login Route
 router.post("/login", (req, res) => {
-    
+
     const { Username, password, role } = req.body;
     if (!Username || !password) {
         return res.status(400).json({ message: "Username and password are required." });
@@ -35,13 +35,19 @@ router.post("/login", (req, res) => {
 
                 // Generate token
                 const token = jwt.sign({ id: admin.AdminId, role: "admin" }, secretKey, { expiresIn: "1000h" });
-
+                //for production
                 res.cookie("token", token, {
                     httpOnly: true,
-                    maxAge: 3600 * 1000*240000000,
-                    secure: false, // Set true for production (HTTPS required)
+                    sameSite: "None",
+                    maxAge: 24000000 * 60 * 60 * 1000,
+                    secure: true
                 });
-
+                //for test
+                // res.cookie("token", token, {
+                //     httpOnly: true,
+                //     maxAge: 3600 * 1000 * 240000000,
+                //     secure: false, // Set true for production (HTTPS required)
+                // });
                 log.logAdmin(`\nLOGIN - `);
 
                 return res.status(200).json({ message: "Admin login successful!", token, role: "admin" });
@@ -91,12 +97,19 @@ router.post("/login", (req, res) => {
                     const token = jwt.sign({ id: user.userID, role: "user" }, secretKey, { expiresIn: "1000h" });
 
                     log.logUser(`\nLOGIN - ${user.userID}`);
-
+                    //for production
                     res.cookie("token", token, {
                         httpOnly: true,
-                        maxAge: 240000 * 60 * 60 * 1000, 
-                        secure: false, // Set true for production (HTTPS required)
+                        sameSite: "None",
+                        maxAge: 24000000 * 60 * 60 * 1000,
+                        secure: true
                     });
+                    //for test
+                    //     res.cookie("token", token, {
+                    //         httpOnly: true,
+                    //         maxAge: 240000 * 60 * 60 * 1000,
+                    //         secure: false, // Set true for production (HTTPS required)
+                    //     });
 
                     return res.status(200).json({ message: "User login successful!", token, role: "user" });
                 });
