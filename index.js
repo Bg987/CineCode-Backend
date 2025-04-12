@@ -25,7 +25,7 @@ const logout = require("./logout");
 const approve = require("./approve");
 const { emitDashboardData } = require('./dashboard')(server);
 app.use(cors({
-    origin: "https://cine-code-frontend.vercel.app/", // Frontend URL AND change in dashboard.js
+    origin: "https://cine-code-frontend.vercel.app", // Frontend URL AND change in dashboard.js
     methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true
 }));
