@@ -13,6 +13,7 @@ router.use(cookieParser());
 
 // Single Login Route
 router.post("/login", (req, res) => {
+    
     const { Username, password, role } = req.body;
     if (!Username || !password) {
         return res.status(400).json({ message: "Username and password are required." });
@@ -32,7 +33,7 @@ router.post("/login", (req, res) => {
                     return res.status(400).json({ message: "Admin Invalid password." });
                 }
 
-                // Generate admin token
+                // Generate token
                 const token = jwt.sign({ id: admin.AdminId, role: "admin" }, secretKey, { expiresIn: "1000h" });
 
                 res.cookie("token", token, {

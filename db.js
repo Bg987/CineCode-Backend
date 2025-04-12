@@ -1,22 +1,29 @@
 require('dotenv').config();
 const mysql = require('mysql2');
-console.log("host = ",process.env.DB_HOST);
+const url = require('url');
+
+// Parse the connection URL
+const dbUrl = new URL(process.env.DB_URL);
+
 const pool = mysql.createPool({
-  host: process.env.DB_HOST,
-  user: process.env.DB_USER,
-  database: process.env.DB_DATABASE,
+  host: dbUrl.hostname,
+  port: dbUrl.port,
+  user: dbUrl.username,
+  password: dbUrl.password,
+  database: dbUrl.pathname.slice(1), // remove the '/' from pathname
   waitForConnections: true,
-  connectionLimit: 10, // Adjust as needed
-  queueLimit: 0
+  connectTimeout: 10000,
+  ssl: {
+    rejectUnauthorized: false,
+  }
 });
 
-// Test connection
 pool.getConnection((err, connection) => {
   if (err) {
     console.error('Database connection failed:', err);
   } else {
     console.log('Connected to MySQL database!');
-    //connection.release(); // Release connection after testing
+    connection.release();
   }
 });
 

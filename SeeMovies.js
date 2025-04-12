@@ -1,7 +1,8 @@
 const express = require('express');
 const router = express.Router();
-const db = require('./db'); 
-
+const db = require('./db');
+const jwt = require('jsonwebtoken');
+const secretKey = process.env.JWT_SECRET;
 
 // Serve static images
 router.use('/images', express.static("C:/Users/HP/SE/data/movies"));
@@ -12,7 +13,12 @@ router.get('/', (req, res) => {
   if (!userCookie) {
     return res.status(400).json({ error: "unauthorized user" });
   }
- //console.log("call")
+  const token = userCookie.split('=')[1];
+  const decoded = jwt.verify(token, secretKey);
+  const role = decoded.role;//admin or user
+  if (!role || role != 'user') {
+    return res.status(400).json({ error: "bad request" });
+  }
   const { name, lang, year } = req.query;
   let query = 'SELECT * FROM movies WHERE Approved = ?';
   const params = [];

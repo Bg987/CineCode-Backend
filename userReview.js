@@ -13,12 +13,16 @@ router.get("/", async (req, res) => {
     }
     const token = userCookie.split('=')[1];
     const decoded = jwt.verify(token, secretKey);
+    const role = decoded.role;//admin or user
+    if (!role || role != 'user') {
+        return res.status(400).json({ error: "bad request" });
+    }
     const userId = decoded.id;
     let query = `SELECT * FROM review WHERE userID = ?;`
     db.query(query, userId, async (err, results) => {
         if (err) {
             console.log(err);
-            return res.status(500).json({ error: err.message,message: "Server Error" });
+            return res.status(500).json({ error: err.message, message: "Server Error" });
         }
         else if (results.length === 0) {
             return res.status(404).json({ message: "No reviews found for this user." });

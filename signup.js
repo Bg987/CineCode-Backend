@@ -8,12 +8,15 @@ const nodemailer = require('nodemailer');
 const connection = require('./db');
 const log = require('./log')
 const secretKey = process.env.JWT_SECRET;
+const mail = process.env.Email;
+const pass = process.env.Password;
+
 // Nodemailer configuration for sending OTP
 const transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
-        user: '220170116016@vgecg.ac.in',
-        pass: 'Bg@13572468'
+        user: mail,
+        pass: pass,
     }
 });
 
@@ -33,7 +36,7 @@ router.post('/register', (req, res) => {
         const otpToken = jwt.sign({ username, email, password, otp }, secretKey, { expiresIn: '5m' }); // Token expires in 1 minutes
         // Send OTP to userdata's email
         transporter.sendMail({
-            from: '220170116016@vgecg.ac.in',
+            from: mail,
             to: email,
             subject: 'Your OTP Code for Registration',
             text: `Your OTP code is ${otp}. It will expire in 5 minute.`,

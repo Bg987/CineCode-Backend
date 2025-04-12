@@ -46,7 +46,6 @@ router.post("/AOrD", (req, res) => {
         return res.status(400).json({ error: "unauthorized" });
     }
     const { movieId, status } = req.body;
-
     if (status === -1) {
         // Delete the movie if status is -1
         const deleteSql = "DELETE FROM movies WHERE Mid = ?";

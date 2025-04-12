@@ -3,12 +3,20 @@ const cookieParser = require('cookie-parser');
 const app = express();
 const db = require("./db"); // Adjust this based on your database connection file
 const log = require("./log");
+const jwt = require('jsonwebtoken');
+const secretKey = process.env.JWT_SECRET;
 const router = express.Router();
 app.use(cookieParser());
 router.get("/seeR", async (req, res) => {
     const userCookie = req.headers.cookie;
-    if (!userCookie) {
-        return res.status(400).json({ error: "unauthorized user" });
+    if(!userCookie){
+        return res.status(400).json({ error : "unauthorized user" });
+    }
+    const token = userCookie.split('=')[1];
+    const decoded = jwt.verify(token, secretKey);
+    const role = decoded.role;//admin or user
+    if (!role||role != 'user') {
+        return res.status(400).json({ error: "bad request" });
     }
     let search;
     let query = `

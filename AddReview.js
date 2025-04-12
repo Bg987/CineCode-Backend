@@ -13,7 +13,10 @@ router.post("/AddR", async (req, res) => {
     }
     const token = userCookie.split('=')[1];
     const decoded = jwt.verify(token, secretKey);
-    
+    const role = decoded.role;//admin or user
+    if (!role||role != 'user') {
+        return res.status(400).json({ error: "bad request" });
+    }
     const reviewData = {
         uid: decoded.id,
         mid: req.body.Mid,

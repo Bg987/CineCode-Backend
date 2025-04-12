@@ -8,7 +8,7 @@ const http = require('http');
 
 
 const server = http.createServer(app);
-const PORT = process.env.PORT || 4000;
+const PORT = 4000;
 
 // Importing routes and dashboard functionality
 require('./dashboard')(server)
