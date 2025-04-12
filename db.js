@@ -1,6 +1,5 @@
 require('dotenv').config();
 const mysql = require('mysql2');
-const url = require('url');
 
 // Parse the connection URL
 const dbUrl = new URL(process.env.DB_URL);
