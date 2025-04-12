@@ -2,9 +2,15 @@ const express = require('express');
 const router = express.Router();
 const connection = require('./db');
 const fs = require("fs");
+const cloudinary = require("cloudinary").v2;
 const jwt = require('jsonwebtoken');
 const secretKey = process.env.JWT_SECRET;
 const log = require('./log');
+cloudinary.config({
+    cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+    api_key: process.env.CLOUDINARY_API_KEY,
+    api_secret: process.env.CLOUDINARY_API_SECRET,
+});
 //MFApprovence- movies for approvence
 router.get("/MFApprovence", (req, res) => {
     const Cookie = req.headers.cookie;
@@ -50,7 +56,7 @@ router.post("/AOrD", (req, res) => {
         // Delete the movie if status is -1
         const deleteSql = "DELETE FROM movies WHERE Mid = ?";
         const filePath = `C:/Users/HP/SE/data/movies/${movieId}.jpg`;
-        connection.query(deleteSql, [movieId], (err, results) => {
+        connection.query(deleteSql, [movieId], async(err, results) => {
             if (err) {
                 console.log(err);
                 return res.status(500).json({ message: "Error deleting movie" });
@@ -58,16 +64,27 @@ router.post("/AOrD", (req, res) => {
             if (results.affectedRows === 0) {
                 return res.status(404).json({ message: "Movie not found" });
             }
-            if (fs.existsSync(filePath)) {
-                fs.unlink(filePath, (err) => {
-                    if (err) {
-                        return res.status(500).json({ message: "Failed to delete movie file" });
-                    }
-                    res.status(200).json({ message: "Movie and file deleted successfully!" });
+            const publicId = `CineCode/${movieId}`;
+            try {
+                const cloudRes = await cloudinary.uploader.destroy(publicId);
+                if (cloudRes.result !== "ok" && cloudRes.result !== "not found") {
+                    console.warn("Cloudinary image delete failed:", cloudRes);
+                    return res.status(500).json({
+                        message: "Movie deleted from database, but failed to delete image from Cloudinary",
+                    });
+                }
+
+                // If everything successful
+                const logFilestr = "\nMOVIE DELETE - " + movieId;
+                log.logAdmin(logFilestr);
+                res.status(200).json({ message: "Movie and Cloudinary image deleted successfully!" });
+
+            } catch (cloudErr) {
+                console.error("Cloudinary error:", cloudErr);
+                return res.status(500).json({
+                    message: "Movie deleted from database, but Cloudinary error occurred",
+                    error: cloudErr.message,
                 });
-            } else {
-                console.log(`No file found for movieId: ${movieId}`);
-                res.status(200).json({ message: "Movie deleted successfully, but no file found." });
             }
         });
     } else {

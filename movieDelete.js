@@ -1,5 +1,4 @@
 const express = require("express");
-const fs = require("fs");
 const cloudinary = require("cloudinary").v2;
 const jwt = require('jsonwebtoken');
 const secretKey = process.env.JWT_SECRET;
@@ -68,7 +67,7 @@ router.delete("/deleteMovie", (req, res) => {
             return res.status(404).json({ message: "Movie not found" });
         }
 
-        // Attempt to delete from Cloudinary
+        //delete from Cloudinary
         const publicId = `CineCode/${movieId}`;
         try {
             const cloudRes = await cloudinary.uploader.destroy(publicId);
