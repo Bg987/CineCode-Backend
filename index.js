@@ -27,7 +27,7 @@ const { emitDashboardData } = require('./dashboard')(server);
 app.use(cors({
     origin: "https://cine-code-frontend.vercel.app", // Frontend URL AND change in dashboard.js
     methods: ["GET", "POST", "PUT", "DELETE"],
-    withCredentials: true,
+    credentials: true ,
 }));
 
 app.use(express.json());
