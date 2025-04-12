@@ -151,3 +151,16 @@ MOVIE DELETE - 124688e7-8448-4e78-ad40-8dfe6df24833 12-4-2025 15:51:9 Saturday
 LOGOUT -  12-4-2025 15:51:28 Saturday
 LOGIN -  12-4-2025 15:55:43 Saturday
 LOGOUT -  12-4-2025 15:55:53 Saturday
+LOGIN -  12-4-2025 22:52:19 Saturday
+MOVIE ADD - 9b448503-c449-4494-a668-cd83fb309d59 first cloud German By Admin 12-4-2025 23:13:17 Saturday
+LOGOUT -  12-4-2025 23:14:9 Saturday
+LOGIN -  12-4-2025 23:26:28 Saturday
+MOVIE ADD - be41b4ad-390e-490e-b721-d1d2696411dc 220170116016@vgecg.ac.in French By Admin 12-4-2025 23:28:22 Saturday
+LOGOUT -  12-4-2025 23:29:39 Saturday
+LOGIN -  12-4-2025 23:29:58 Saturday
+MOVIE DELETE - fecd9e7a-d050-4068-8560-473568c81c5d 12-4-2025 23:50:13 Saturday
+MOVIE DELETE - be41b4ad-390e-490e-b721-d1d2696411dc 12-4-2025 23:51:48 Saturday
+MOVIE ADD - fee3e2ed-7e0d-4bbc-901d-a8d1837b24fd Bhavya Godhaniya Hindi By Admin 12-4-2025 23:52:48 Saturday
+LOGOUT -  12-4-2025 23:52:58 Saturday
+LOGIN -  12-4-2025 23:57:16 Saturday
+LOGOUT -  12-4-2025 23:57:24 Saturday

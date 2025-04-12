@@ -1,11 +1,16 @@
 const express = require("express");
 const fs = require("fs");
-const path = require("path");
+const cloudinary = require("cloudinary").v2;
 const jwt = require('jsonwebtoken');
 const secretKey = process.env.JWT_SECRET;
 const db = require("./db");  // Your database connection
 const log = require("./log")
 const router = express.Router();
+cloudinary.config({
+    cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+    api_key: process.env.CLOUDINARY_API_KEY,
+    api_secret: process.env.CLOUDINARY_API_SECRET,
+});
 // Fetch all movies from the database
 router.get("/getMovies", (req, res) => {
     const Cookie = req.headers.cookie;
@@ -35,17 +40,26 @@ router.delete("/deleteMovie", (req, res) => {
     if (!Cookie) {
         return res.status(400).json({ error: "unauthorized user" });
     }
-    const token = Cookie.split('=')[1];
-    const decoded = jwt.verify(token, secretKey);
+
+    const token = Cookie.split("=")[1];
+    let decoded;
+    try {
+        decoded = jwt.verify(token, secretKey);
+    } catch (err) {
+        return res.status(400).json({ error: "invalid token" });
+    }
+
     const AdminId = decoded.id;
     const role = decoded.role;
-    if (role !== 'admin' || AdminId !== 'Bg@1234') {
+
+    if (role !== "admin" || AdminId !== "Bg@1234") {
         return res.status(400).json({ error: "unauthorized" });
     }
+
     const { movieId } = req.body;
-    const filePath = `C:/Users/HP/SE/data/movies/${movieId}.jpg`;
-    const deleteMovieSql = "DELETE FROM movies WHERE Mid = ? ";
-    db.query(deleteMovieSql, [movieId], (err, results) => {
+    const deleteMovieSql = "DELETE FROM movies WHERE Mid = ?";
+
+    db.query(deleteMovieSql, [movieId], async (err, results) => {
         if (err) {
             console.error("Error deleting movie:", err);
             return res.status(500).json({ message: "Failed to delete movie" });
@@ -53,21 +67,31 @@ router.delete("/deleteMovie", (req, res) => {
         if (results.affectedRows === 0) {
             return res.status(404).json({ message: "Movie not found" });
         }
-        // Step 2: Delete the file associated with the movieId from the filesystem
-        if (fs.existsSync(filePath)) {
-            fs.unlink(filePath, (err) => {
-                if (err) {
-                    //console.error("Error deleting movie file:", err);
-                    return res.status(500).json({ message: "Failed to delete movie file" });
-                }
-                // console.log(`File ${filePath} deleted successfully.`);
-                const logFilestr = "\nMOVIE DELETE - " + movieId;
-                log.logAdmin(logFilestr);
-                res.status(200).json({ message: "Movie and file deleted successfully!" });
+
+        // Attempt to delete from Cloudinary
+        const publicId = `CineCode/${movieId}`;
+        try {
+            const cloudRes = await cloudinary.uploader.destroy(publicId);
+            if (cloudRes.result !== "ok" && cloudRes.result !== "not found") {
+                console.warn("Cloudinary image delete failed:", cloudRes);
+                return res.status(500).json({
+                    message: "Movie deleted from database, but failed to delete image from Cloudinary",
+                });
+            }
+
+            // If everything successful
+            const logFilestr = "\nMOVIE DELETE - " + movieId;
+            log.logAdmin(logFilestr);
+            res.status(200).json({ message: "Movie and Cloudinary image deleted successfully!" });
+
+        } catch (cloudErr) {
+            console.error("Cloudinary error:", cloudErr);
+            return res.status(500).json({
+                message: "Movie deleted from database, but Cloudinary error occurred",
+                error: cloudErr.message,
             });
-        } else {
-            res.status(200).json({ message: "Movie deleted successfully, but no file found." });
         }
     });
 });
+
 module.exports = router;

@@ -60,16 +60,13 @@ router.post('/id', (req, res) => {
   let Uid;
   let query = 'SELECT * FROM movies WHERE Mid = ?';
   try {
-    db.query(query, id, (err, movies) => {
+    db.query(query, id, (err, moviesData) => {
       if (err) {
         console.error(err);
         return res.status(500).json({ message: 'Server error' });
       }
-      if (movies.length > 0) {
-        let moviesData = movies.map(movie => ({
-          ...movie,
-          ImageUrl: `/apiSeeM/images/${movie.Mid}.jpg`, // URL for the static image
-        }));
+      if (moviesData.length > 0) {
+       console.log(moviesData);
         res.json(moviesData);
       }
       else {
