@@ -32,7 +32,6 @@ app.use(cors({
 
 app.use(express.json());
 app.use(fileUpload()); //file upload handling
-//app.use(express.static(path.join(__dirname, '../frontend'))); // Serve static files
 
 app.use('/apiSeeM', SeeMovies);
 app.use('/apiAddR', AddReview);
@@ -46,19 +45,11 @@ app.use((req, res, next) => {
     emitDashboardData(); // Pass control to the next middleware 
 });
 //routers which can change realtime dashboard data
-
 app.use('/apiSignup', signupRouter);
 app.use('/apiMovie', AddMovie);
 app.use('/apifAndD', FetchAndDelete);
 app.use('/ApiApprove', approve);
 
-// app.get("/x",(req,res)=>{
-//     const userCookie = req.headers.cookie;
-//         if (!userCookie) {
-//             return res.status(400).json({message :"unauthorized user"});
-//         }
-// })
-// 404 Error handler for unmatched routes
 app.use((req, res) => {
     res.status(404).json('404: Resource Not Found');
 });
