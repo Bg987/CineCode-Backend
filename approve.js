@@ -121,7 +121,6 @@ async function mail(Mid, status) {
             const query = "SELECT * FROM movies WHERE Mid = ?";
             connection.query(query, [Mid], (err, results) => {
                 if (err) return reject(err);
-                if (results.length === 0) return reject(new Error("Movie not found"));
                 resolve(results);
             });
         });
