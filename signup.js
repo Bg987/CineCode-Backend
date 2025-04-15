@@ -1,7 +1,7 @@
 // signup.js
 const express = require('express');
 const router = express.Router();
-const path = require('path');
+
 const { v4: uuidv4 } = require('uuid');
 const jwt = require('jsonwebtoken');
 const nodemailer = require('nodemailer');
