@@ -56,8 +56,6 @@ router.post("/AOrD", (req, res) => {
     const token = Cookie.split('=')[1];
     const decoded = jwt.verify(token, secretKey);
     const Id = decoded.id;
-    console.log(decoded);
-    console.log("UId = ", Id);
     const role = decoded.role;
     if (role !== 'admin' || Id !== 'Bg@1234') {
         return res.status(400).json({ error: "unauthorized" });
@@ -84,7 +82,8 @@ router.post("/AOrD", (req, res) => {
                         message: "Movie deleted from database, but failed to delete image from Cloudinary",
                     });
                 }
-                await mail(id, status);
+                console.log(movieId);
+                await mail(movieId, status);
                 // If everything successful
                 const logFilestr = "\nMOVIE DELETE - " + movieId;
                 log.logAdmin(logFilestr);
@@ -109,6 +108,7 @@ router.post("/AOrD", (req, res) => {
             if (results.affectedRows === 0) {
                 return res.status(404).json({ message: "Movie not found" });
             }
+            console.log(movieId);
             await mail(movieId, status);
             return res.status(200).json({ message: "Movie approved" });
         });
@@ -116,7 +116,6 @@ router.post("/AOrD", (req, res) => {
 });
 
 async function mail(Mid, status) {
-
     try {
         const movieResults = await new Promise((resolve, reject) => {
             const query = "SELECT * FROM movies WHERE Mid = ?";
