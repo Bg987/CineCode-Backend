@@ -73,7 +73,6 @@ router.post("/AOrD", (req, res) => {
                 return res.status(404).json({ message: "Movie not found" });
             }
             const publicId = `CineCode/${movieId}`;
-            const id = movieId;
             try {
                 const cloudRes = await cloudinary.uploader.destroy(publicId);
                 if (cloudRes.result !== "ok" && cloudRes.result !== "not found") {
