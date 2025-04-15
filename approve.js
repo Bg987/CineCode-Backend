@@ -75,6 +75,7 @@ router.post("/AOrD", (req, res) => {
                 return res.status(404).json({ message: "Movie not found" });
             }
             const publicId = `CineCode/${movieId}`;
+            const id = movieId;
             try {
                 const cloudRes = await cloudinary.uploader.destroy(publicId);
                 if (cloudRes.result !== "ok" && cloudRes.result !== "not found") {
@@ -83,7 +84,7 @@ router.post("/AOrD", (req, res) => {
                         message: "Movie deleted from database, but failed to delete image from Cloudinary",
                     });
                 }
-                await mail(movieId, status);
+                await mail(id, status);
                 // If everything successful
                 const logFilestr = "\nMOVIE DELETE - " + movieId;
                 log.logAdmin(logFilestr);
