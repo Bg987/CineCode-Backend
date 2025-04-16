@@ -5,11 +5,11 @@ const fileUpload = require('express-fileupload');
 const cors = require('cors');
 const app = express();
 const http = require('http');
-const prod = process.env.NODE_ENV === 'production';
+const url = process.env.NODE_ENV === 'production'?"cine-code-frontend.vercel.app/" : "http://192.168.121.47:5100";
 
 const server = http.createServer(app);
 const PORT = 4000;
-
+console.log(url);
 // Importing routes and dashboard functionality
 require('./dashboard')(server)
 const signupRouter = require('./signup');
@@ -25,8 +25,8 @@ const logout = require("./logout");
 const approve = require("./approve");
 const { emitDashboardData } = require('./dashboard')(server);
 app.use(cors({
-    origin: prod ? "cine-code-frontend.vercel.app" :"http://192.168.121.47:5100",
-        methods: ["GET", "POST", "PUT", "DELETE"],
+    origin: url ,
+    methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true,
 }));
 
