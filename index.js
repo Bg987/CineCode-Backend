@@ -5,7 +5,7 @@ const fileUpload = require('express-fileupload');
 const cors = require('cors');
 const app = express();
 const http = require('http');
-
+const prod = process.env.NODE_ENV === 'production';
 
 const server = http.createServer(app);
 const PORT = 4000;
@@ -25,9 +25,9 @@ const logout = require("./logout");
 const approve = require("./approve");
 const { emitDashboardData } = require('./dashboard')(server);
 app.use(cors({
-    origin: "https://cine-code-frontend.vercel.app", // Frontend URL,change in dashboard.js /http://192.168.121.47:5100
-    methods: ["GET", "POST", "PUT", "DELETE"],
-    credentials: true ,
+    origin: prod ? "cine-code-frontend.vercel.app" :"http://192.168.121.47:5100",
+        methods: ["GET", "POST", "PUT", "DELETE"],
+    credentials: true,
 }));
 
 app.use(express.json());
@@ -38,7 +38,7 @@ app.use('/apiAddR', AddReview);
 app.use('/apiSeeR', seeR);
 app.use('/apiUserReview', userReview);
 app.use('/apiForget', forgotPassword);
-app.use('/apiLogin' ,loginRoute);
+app.use('/apiLogin', loginRoute);
 app.use('/apiLogOut', logout);
 app.use((req, res, next) => {
     next();// Call emitDashboardData before the route is processed routes given below modify user real time dashboard

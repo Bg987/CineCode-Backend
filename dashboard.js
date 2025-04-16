@@ -1,12 +1,12 @@
-
+const prod = process.env.NODE_ENV === 'production';
 module.exports = (server) => {
     const { Server } = require('socket.io');
     const db = require('./db');
     const io = new Server(server, {
         cors: {
-            origin: 'https://cine-code-frontend.vercel.app', 
+            origin: prod ? "cine-code-frontend.vercel.app" :"http://192.168.121.47:5100",
             methods: ['GET', 'POST'],
-            withCredentials: true, 
+            withCredentials: true,
         },
     });
     io.on('connection', (socket) => {
@@ -25,10 +25,10 @@ module.exports = (server) => {
                 io.emit('ActiveU', "error");
                 return;
             }
-            try{
-            io.emit('ActiveU', result[0].count);
+            try {
+                io.emit('ActiveU', result[0].count);
             }
-            catch(err){
+            catch (err) {
                 console.log("Error in ActiveU: ", err);
                 io.emit('ActiveU', "error");
             }
@@ -36,7 +36,7 @@ module.exports = (server) => {
     } // Emit every 5 seconds    
     setInterval(() => {
         ActiveU();
-    }, 5000); 
+    }, 5000);
     // Emit dashboard data to admin
     function emitDashboardData() {
         ActiveU();
@@ -50,11 +50,11 @@ module.exports = (server) => {
         const data = {};
         const queries = [
             { key: 'userNo', sql: 'SELECT COUNT(*) AS count FROM userdata' },
-            { key: 'movieNo', sql: 'SELECT COUNT(*) AS count FROM movies WHERE Approved = ?',params: [1] },
+            { key: 'movieNo', sql: 'SELECT COUNT(*) AS count FROM movies WHERE Approved = ?', params: [1] },
             { key: 'AdminMovieNo', sql: 'SELECT COUNT(*) AS count FROM movies WHERE `By` = ?', params: ['Admin'] },
             { key: 'AppMovieNo', sql: 'SELECT COUNT(*) AS count FROM movies WHERE Approved = ?', params: [0] },
-            { key: 'LongestMovie', sql: 'SELECT * FROM  movies WHERE Approved = ? ORDER BY Duration DESC LIMIT 1',params: [1] },
-            { key: 'SmallestMovie', sql: 'SELECT * FROM  movies WHERE Approved = ? ORDER BY Duration ASC LIMIT 1',params: [1] },
+            { key: 'LongestMovie', sql: 'SELECT * FROM  movies WHERE Approved = ? ORDER BY Duration DESC LIMIT 1', params: [1] },
+            { key: 'SmallestMovie', sql: 'SELECT * FROM  movies WHERE Approved = ? ORDER BY Duration ASC LIMIT 1', params: [1] },
         ];
         let completed = 0;
         queries.forEach((query) => {
@@ -73,6 +73,6 @@ module.exports = (server) => {
         });
     }
     return {
-        emitDashboardData,ActiveU // Exporting the function
+        emitDashboardData, ActiveU // Exporting the function
     };
 };

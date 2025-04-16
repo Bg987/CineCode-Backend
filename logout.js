@@ -3,6 +3,7 @@ const log = require("./log");
 const router = express.Router();
 const jwt = require('jsonwebtoken');
 const secretKey = process.env.JWT_SECRET;
+const prod = process.env.NODE_ENV === 'production';
 const connection = require('./db'); // Database connection
 const app = express();
 
@@ -27,14 +28,17 @@ router.get("/logoutUser", async (req, res) => {
             // Log the user logout
             const logFilestr = "\nLOGOUT - " + userId;
             log.logUser(logFilestr);
-            //for production
-            res.clearCookie("token", {
-                httpOnly: true,
-                secure: true, // Ensure it's true if using HTTPS
-                sameSite: "None" // Important for cross-origin requests
-            });
-            //for test
-            //res.clearCookie('token');
+            if (!prod) {
+                //for test
+                res.clearCookie('token');
+            }
+            else {//for production
+                res.clearCookie("token", {
+                    httpOnly: true,
+                    secure: true, // Ensure it's true if using HTTPS
+                    sameSite: "None" // Important for cross-origin requests
+                });
+            }
             res.status(200).send("Logout successful");
         });
     } catch (err) {
@@ -46,14 +50,17 @@ router.get("/logoutUser", async (req, res) => {
 router.get("/logoutAdmin", (req, res) => {
     try {
         const logFilestr = "\nLOGOUT - ";
-        //for production
-        res.clearCookie("token", {
-            httpOnly: true,
-            secure: true, // Ensure it's true if using HTTPS
-            sameSite: "None" // Important for cross-origin requests
-        });
-        //for test
-        // res.clearCookie('token');
+        if (!prod) {
+            //for test
+            res.clearCookie('token');
+        }
+        else {//for production
+            res.clearCookie("token", {
+                httpOnly: true,
+                secure: true, // Ensure it's true if using HTTPS
+                sameSite: "None" // Important for cross-origin requests
+            });
+        }
         log.logAdmin(logFilestr);
         res.status(200).json("ok");
     }

@@ -81,8 +81,6 @@ router.post("/AOrD", (req, res) => {
                         message: "Movie deleted from database, but failed to delete image from Cloudinary",
                     });
                 }
-                console.log(movieId);
-                await mail(movieId, status);
                 // If everything successful
                 const logFilestr = "\nMOVIE DELETE - " + movieId;
                 log.logAdmin(logFilestr);
@@ -107,61 +105,8 @@ router.post("/AOrD", (req, res) => {
             if (results.affectedRows === 0) {
                 return res.status(404).json({ message: "Movie not found" });
             }
-            console.log(movieId);
-            await mail(movieId, status);
             return res.status(200).json({ message: "Movie approved" });
         });
     }
 });
-
-async function mail(Mid, status) {
-    try {
-        const movieResults = await new Promise((resolve, reject) => {
-            const query = "SELECT * FROM movies WHERE Mid = ?";
-            connection.query(query, [Mid], (err, results) => {
-                if (err) return reject(err);
-                resolve(results);
-            });
-        });
-        const movieData = movieResults[0];
-        const userResults = await new Promise((resolve, reject) => {
-            const sql = "SELECT * FROM userdata WHERE userID = ?";
-            connection.query(sql, [movieData.By], (err, results) => {
-                if (err) return reject(err);
-                if (results.length === 0) return reject(new Error("User not found"));
-                resolve(results);
-            });
-        });
-        const userdata = userResults[0];
-        const mailOptions = {
-            from: process.env.Email,
-            to: userdata.Email,
-            subject: "Movie Approval Status",
-            text: `Dear ${userdata.userName},
-
-Your movie submission has been ${status === 1 ? 'approved' : 'disapproved'}.
-
-Movie Details:
-- Title: ${movieData.Mname}
-- Language: ${movieData.Language}
-- Release Year: ${movieData.Year}
-- Description: ${movieData.Discription}
-
-Best regards,
-CineCode Team`,
-        };
-
-        await new Promise((resolve, reject) => {
-            transporter.sendMail(mailOptions, (error, info) => {
-                if (error) return reject(error);
-                resolve();
-            });
-        });
-
-    } catch (error) {
-        console.error("Error in mail function:", error.message);
-        throw error; // optional: rethrow if you want to handle this in the caller
-    }
-}
-
 module.exports = router;

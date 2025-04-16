@@ -16,6 +16,7 @@ router.get('/', (req, res) => {
   const token = userCookie.split('=')[1];
   const decoded = jwt.verify(token, secretKey);
   const role = decoded.role;//admin or user
+  const userId = decoded.id;
   if (!role || role != 'user') {
     return res.status(400).json({ error: "bad request" });
   }
@@ -43,11 +44,11 @@ router.get('/', (req, res) => {
         return res.status(500).json({ error: 'Server error' });
       }
       // Add image URL to each movie
-      const moviesWithImages = movies.map(movie => ({
+      const moviesWith = movies.map(movie => ({
         ...movie,
-        ImageUrl: `/apiSeeM/images/${movie.Mid}.jpg` // URL for the static image
+        By: userId === movie.By ? "You" : movie.By,
       }));
-      res.json(moviesWithImages);
+      res.json(moviesWith);
     });
   } catch (error) {
     console.error(error);
@@ -57,7 +58,6 @@ router.get('/', (req, res) => {
 //send movie details to give review
 router.post('/id', (req, res) => {
   const { id } = req.body;
-  let Uid;
   let query = 'SELECT * FROM movies WHERE Mid = ?';
   try {
     db.query(query, id, (err, moviesData) => {
@@ -66,8 +66,11 @@ router.post('/id', (req, res) => {
         return res.status(500).json({ message: 'Server error' });
       }
       if (moviesData.length > 0) {
-       console.log(moviesData);
-        res.json(moviesData);
+        const moviesWith = moviesData.map(movie => ({
+          ...movie,
+          By: userId === movie.By ? "You" : movie.By,
+        }));
+        res.json(moviesWith);
       }
       else {
         res.status(400).send('Error in database');

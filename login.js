@@ -4,7 +4,7 @@ const cookieParser = require("cookie-parser");
 const jwt = require("jsonwebtoken");
 const connection = require("./db"); // Database connection
 const log = require("./log");
-
+const prod = process.env.NODE_ENV === 'production';
 const secretKey = process.env.JWT_SECRET;
 
 // Middleware
@@ -13,7 +13,6 @@ router.use(cookieParser());
 
 // Single Login Route
 router.post("/login", (req, res) => {
-
     const { Username, password, role } = req.body;
     if (!Username || !password) {
         return res.status(400).json({ message: "Username and password are required." });
@@ -32,24 +31,24 @@ router.post("/login", (req, res) => {
                 if (password !== admin.AdminPass) {
                     return res.status(400).json({ message: "Admin Invalid password." });
                 }
-
                 // Generate token
                 const token = jwt.sign({ id: admin.AdminId, role: "admin" }, secretKey, { expiresIn: "1000h" });
-                //for production
-                res.cookie("token", token, {
-                    httpOnly: true,
-                    sameSite: "None",
-                    maxAge: 24000000 * 60 * 60 * 1000,
-                    secure: true
-                });
-                //for test
-                // res.cookie("token", token, {
-                //     httpOnly: true,
-                //     maxAge: 3600 * 1000 * 240000000,
-                //     secure: false, // Set true for production (HTTPS required)
-                // });
+                if(!prod) {
+                    res.cookie("token", token, {
+                            httpOnly: true,
+                            maxAge: 3600 * 1000 * 240000000,
+                            secure: false, // Set true for production (HTTPS required)
+                        });
+                }
+                else{
+                    res.cookie("token", token, {
+                        httpOnly: true,
+                        sameSite: "None",
+                        maxAge: 24000000 * 60 * 60 * 1000,
+                        secure: true
+                    });
+                }
                 log.logAdmin(`\nLOGIN - `);
-
                 return res.status(200).json({ message: "Admin login successful!", token, role: "admin" });
             }
         });
@@ -97,20 +96,22 @@ router.post("/login", (req, res) => {
                     const token = jwt.sign({ id: user.userID, role: "user" }, secretKey, { expiresIn: "1000h" });
 
                     log.logUser(`\nLOGIN - ${user.userID}`);
-                    //for production
-                    res.cookie("token", token, {
-                        httpOnly: true,
-                        sameSite: "None",
-                        maxAge: 24000000 * 60 * 60 * 1000,
-                        secure: true
-                    });
-                    //for test
-                        // res.cookie("token", token, {
-                        //     httpOnly: true,
-                        //     maxAge: 240000 * 60 * 60 * 1000,
-                        //     secure: false, // Set true for production (HTTPS required)
-                        // });
-
+                    if(!prod) {
+                        console.log("prod2", prod);
+                        res.cookie("token", token, {
+                                httpOnly: true,
+                                maxAge: 3600 * 1000 * 240000000,
+                                secure: false, // Set true for production (HTTPS required)
+                            });
+                    }
+                    else{
+                        res.cookie("token", token, {
+                            httpOnly: true,
+                            sameSite: "None",
+                            maxAge: 24000000 * 60 * 60 * 1000,
+                            secure: true
+                        });
+                    }
                     return res.status(200).json({ message: "User login successful!", token, role: "user" });
                 });
             });
