@@ -9,7 +9,6 @@ const url = process.env.NODE_ENV === 'production'?"https://cine-code-frontend.ve
 
 const server = http.createServer(app);
 const PORT = 4000;
-console.log(url);
 // Importing routes and dashboard functionality
 require('./dashboard')(server)
 const signupRouter = require('./signup');
