@@ -3,7 +3,7 @@ const sharp = require("sharp");
 const cloudinary = require("cloudinary").v2;
 const jwt = require("jsonwebtoken");
 const { v4: uuidv4 } = require("uuid");
-const db = require("./db"); // Adjust path to your DB config
+const db = require("./db"); 
 const log = require("./log");
 const router = express.Router();
 

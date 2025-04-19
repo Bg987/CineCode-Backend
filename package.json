@@ -10,7 +10,8 @@
     "start": "npm run start-node",
     "stop-xampp": "cmd /C taskkill /F /IM httpd.exe",
     "stop-mysql": "cmd /C taskkill /F /IM mysqld.exe",
-    "stop": "npx concurrently \"npm run stop-xampp\" \"npm run stop-mysql\""
+    "stop": "npx concurrently \"npm run stop-xampp\" \"npm run stop-mysql\"",
+    "test": "jest"
   },
   "author": "",
   "license": "ISC",
@@ -37,6 +38,7 @@
     "sharp": "^0.34.1",
     "socket.io": "^4.8.1",
     "socket.io-client": "^4.8.1",
+    "supertest": "^7.1.0",
     "url": "^0.11.4",
     "uuid": "^11.0.2"
   }

@@ -33,7 +33,7 @@ router.post('/register', (req, res) => {
             return res.status(400).json({ message: 'userdataname, email, and password are required.' });
         }
         const otp = generateOTP();
-        const otpToken = jwt.sign({ username, email, password, otp }, secretKey, { expiresIn: '5m' }); // Token expires in 1 minutes
+        const otpToken = jwt.sign({ username, email, password, otp }, secretKey, { expiresIn: '5m' }); // Token expires in 5 minutes
         // Send OTP to userdata's email
         transporter.sendMail({
             from: mail,

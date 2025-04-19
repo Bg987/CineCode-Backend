@@ -22,6 +22,7 @@ const seeR = require("./seereview");
 const userReview = require("./userReview");
 const logout = require("./logout");
 const approve = require("./approve");
+const edit = require("./edit");
 const { emitDashboardData } = require('./dashboard')(server);
 app.use(cors({
     origin: url ,
@@ -33,6 +34,7 @@ app.use(express.json());
 app.use(fileUpload()); //file upload handling
 
 app.use('/apiSeeM', SeeMovies);
+app.use('/apiEdit', edit);
 app.use('/apiAddR', AddReview);
 app.use('/apiSeeR', seeR);
 app.use('/apiUserReview', userReview);
@@ -55,5 +57,5 @@ app.use((req, res) => {
 
 // Start the server
 server.listen(PORT, () => {
-    console.log(`Server is running on`);
+    console.log(`Server is running on port ${PORT}`);
 });

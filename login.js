@@ -97,7 +97,6 @@ router.post("/login", (req, res) => {
 
                     log.logUser(`\nLOGIN - ${user.userID}`);
                     if(!prod) {
-                        console.log("prod2", prod);
                         res.cookie("token", token, {
                                 httpOnly: true,
                                 maxAge: 3600 * 1000 * 240000000,
