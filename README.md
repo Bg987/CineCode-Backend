@@ -28,6 +28,5 @@ The **CineCode Backend** is a Node.js-powered REST API for managing movies, user
 | Auth & Crypto | bcrypt, cookie-parser            |
 | Uploads       | express-fileupload, Cloudinary   |
 | Env Config    | dotenv                           |
-| Dev Utils     | concurrently, fs, child_process  |
 
 
