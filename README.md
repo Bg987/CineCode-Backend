@@ -1,4 +1,4 @@
-# 🎬 CineCode Backend
+# 🎬 CineCode
 
 The **CineCode Backend** is a Node.js-powered REST API for managing movies, user reviews, and admin operations. It uses Express.js for the backend server and MySQL for data persistence. Ideal for movie-related platforms requiring review, approval, and authentication features.
 
