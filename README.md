@@ -13,7 +13,7 @@ The **CineCode Backend** is a Node.js-powered REST API for managing movies, user
 - 🌐 CORS-enabled for cross-origin requests
 - ☁️ Image Uploads via Cloudinary 
 - 🔄 cookie-based auth which contain id and role
-- 🛠 Database deployes on ##Railway and backend deploy on ##render
+- 🛠 Database deployes on **Railway and backend deploy on **render
 
 ---
 
