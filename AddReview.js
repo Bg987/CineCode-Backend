@@ -24,6 +24,9 @@ router.post("/AddR", async (req, res) => {
         rating: req.body.rating,
         Mname: req.body.Mname
     };
+    if(!uid||!mid||!review||!rating||!Mname){
+        return res.status(400).json({ error: "All fields are required" });
+    }
     const reviewID = uuidv4();
     try {
         // Insert movie details into the database
