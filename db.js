@@ -1,7 +1,6 @@
 require('dotenv').config();
 const mysql = require('mysql2');
 
-// Parse the connection URL
 const dbUrl = new URL(process.env.DB_URL);
 
 const pool = mysql.createPool({
@@ -9,12 +8,9 @@ const pool = mysql.createPool({
   port: dbUrl.port,
   user: dbUrl.username,
   password: dbUrl.password,
-  database: dbUrl.pathname.slice(1), // remove the '/' from pathname
+  database: dbUrl.pathname.slice(1),
   waitForConnections: true,
   connectTimeout: 10000,
-  ssl: {
-    rejectUnauthorized: false,
-  }
 });
 
 pool.getConnection((err, connection) => {

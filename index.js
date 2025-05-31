@@ -5,7 +5,7 @@ const fileUpload = require('express-fileupload');
 const cors = require('cors');
 const app = express();
 const http = require('http');
-const url = process.env.NODE_ENV === 'production'?"https://cine-code-frontend.vercel.app" : "http://192.168.45.47:5100";
+const url = process.env.NODE_ENV === 'production'?"https://cine-code-frontend.vercel.app" : "http://192.168.111.47:5100";
 
 const server = http.createServer(app);
 const PORT = 4000;
