@@ -18,13 +18,13 @@ router.post("/AddR", async (req, res) => {
         return res.status(400).json({ error: "bad request" });
     }
     const reviewData = {
-        uid: decoded.id,
+        Uid: decoded.id,
         mid: req.body.Mid,
         review: req.body.review,
         rating: req.body.rating,
         Mname: req.body.Mname
     };
-    if(!uid||!mid||!review||!rating||!Mname){
+    if(!reviewData.Uid||!reviewData.mid||!reviewData.review||!reviewData.rating||!reviewData.Mname){
         return res.status(400).json({ error: "All fields are required" });
     }
     const reviewID = uuidv4();
@@ -33,7 +33,7 @@ router.post("/AddR", async (req, res) => {
         const sql = `INSERT INTO review (id, userID, Mid,Mname, review, rating) VALUES (?, ?,? ,?, ?, ?)`;
         const values = [
             reviewID,
-            reviewData.uid,
+            reviewData.Uid,
             reviewData.mid,
             reviewData.Mname,
             reviewData.review,

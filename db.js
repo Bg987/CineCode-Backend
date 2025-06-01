@@ -11,6 +11,10 @@ const pool = mysql.createPool({
   database: dbUrl.pathname.slice(1),
   waitForConnections: true,
   connectTimeout: 10000,
+  ssl: {
+    // This enables SSL without needing a certificate
+    rejectUnauthorized: true
+  }
 });
 
 pool.getConnection((err, connection) => {
