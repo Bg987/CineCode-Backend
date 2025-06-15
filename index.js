@@ -1,6 +1,7 @@
 require('dotenv').config();
 const express = require('express');
 const path = require('path');
+const os = require('os');
 const fileUpload = require('express-fileupload');
 const cors = require('cors');
 const app = express();
@@ -58,4 +59,14 @@ app.use((req, res) => {
 // Start the server
 server.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
+    console.log("OS:", os.type());
+console.log("Platform:", os.platform());
+console.log("Release:", os.release());
+console.log("Architecture:", os.arch());
+console.log("Total Memory:", os.totalmem());
+console.log("Free Memory:", os.freemem());
+console.log("Uptime (min):", os.uptime() / 60);
+console.log("User Info:", os.userInfo());
+console.log("Network Interfaces:", os.networkInterfaces());
+
 });
