@@ -58,12 +58,12 @@ app.use('/apiLogOut',emitAfterResponse, logout);
 app.use('/apiSignup',emitAfterResponse, signupRouter);
 app.use('/apifAndD', emitAfterResponse, FetchAndDelete);
 app.use('/ApiApprove', emitAfterResponse,approve);
+app.use('/apiMovie', emitAfterResponse, AddMovie);
 // Routes that don’t need emit
 app.use('/apiSeeM', SeeMovies);
 app.use('/apiSeeR', seeR);
 app.use('/apiUserReview', userReview);
 app.use('/apiForget', forgotPassword);
-app.use('/apiMovie',  AddMovie);
 app.use('/apiEdit', edit);
 app.use('/apiAddR',AddReview);
 
