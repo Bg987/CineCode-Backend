@@ -34,23 +34,22 @@ app.use(cors({
 app.use(express.json());
 app.use(fileUpload()); //file upload handling
 
+app.use('/apiLogin', loginRoute);
+app.use('/apiSignup', signupRouter);
+app.use('/apiMovie', AddMovie);
+app.use('/apifAndD', FetchAndDelete);
+app.use('/ApiApprove', approve);
+app.use((req, res, next) => {
+    next();// Call emitDashboardData after the route is processed routes given below modify user real time dashboard
+    emitDashboardData(); // Pass control to the next middleware 
+});
+//routers which can change realtime dashboard data
 app.use('/apiSeeM', SeeMovies);
 app.use('/apiEdit', edit);
 app.use('/apiAddR', AddReview);
 app.use('/apiSeeR', seeR);
 app.use('/apiUserReview', userReview);
 app.use('/apiForget', forgotPassword);
-app.use('/apiLogin', loginRoute);
-app.use('/apiLogOut', logout);
-app.use((req, res, next) => {
-    next();// Call emitDashboardData before the route is processed routes given below modify user real time dashboard
-    emitDashboardData(); // Pass control to the next middleware 
-});
-//routers which can change realtime dashboard data
-app.use('/apiSignup', signupRouter);
-app.use('/apiMovie', AddMovie);
-app.use('/apifAndD', FetchAndDelete);
-app.use('/ApiApprove', approve);
 
 app.use((req, res) => {
     res.status(404).json('404: Resource Not Found');
