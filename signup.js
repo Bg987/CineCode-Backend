@@ -38,7 +38,7 @@ router.post('/register', (req, res) => {
         transporter.sendMail({
             from: mail,
             to: email,
-            subject: 'Your OTP Code for Registration',
+            subject: 'CineCode new user sign up OTP',
             text: `Your OTP code is ${otp}. It will expire in 5 minute.`,
         }, (error) => {
             if (error) {

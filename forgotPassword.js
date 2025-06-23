@@ -34,7 +34,7 @@ router.post("/forgetPassword", (req, res) => {
             const mailOptions = {
                 from: process.env.Email,
                 to: userdata.Email,
-                subject: "Your Password Recovery",
+                subject: "Cinecode Password Recovery",
                 text: `Dear ${username},\n\nYour password is: ${userdata.Password}\n\nPlease keep it secure.`
             };
             try {
