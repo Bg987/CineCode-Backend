@@ -53,21 +53,19 @@ app.use(express.json());
 app.use(fileUpload());
 
 // Routes that don’t impact real-time dashboard
-app.use('/apiLogin', loginRoute);
-app.use('/apiSignup', signupRouter);
-app.use('/apifAndD', FetchAndDelete);
-app.use('/ApiApprove', approve);
-
-// Routes that modify dashboard — wrapped with emitAfterResponse
-app.use('/apiMovie', emitAfterResponse, AddMovie);
-app.use('/apiEdit', emitAfterResponse, edit);
-app.use('/apiAddR', emitAfterResponse, AddReview);
-
+app.use('/apiLogin',emitAfterResponse, loginRoute);
+app.use('/apiLogOut',emitAfterResponse, logout);
+app.use('/apiSignup',emitAfterResponse, signupRouter);
+app.use('/apifAndD', emitAfterResponse, FetchAndDelete);
+app.use('/ApiApprove', emitAfterResponse,approve);
 // Routes that don’t need emit
 app.use('/apiSeeM', SeeMovies);
 app.use('/apiSeeR', seeR);
 app.use('/apiUserReview', userReview);
 app.use('/apiForget', forgotPassword);
+app.use('/apiMovie',  AddMovie);
+app.use('/apiEdit', edit);
+app.use('/apiAddR',AddReview);
 
 // 404 fallback
 app.use((req, res) => {
@@ -77,4 +75,13 @@ app.use((req, res) => {
 // Server start
 server.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
+    console.log("OS:", os.type());
+    console.log("Platform:", os.platform());
+    console.log("Release:", os.release());
+    console.log("Architecture:", os.arch());
+    console.log("Total Memory:", os.totalmem() / (1024 * 1024));
+    console.log("Free Memory:", os.freemem() / (1024 * 1024));
+    console.log("Uptime (min):", os.uptime() / 60);
+    console.log("User Info:", os.userInfo());
+    console.log("Network Interfaces:", os.networkInterfaces());
 });
