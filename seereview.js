@@ -92,5 +92,34 @@ JOIN
     // Convert the map values to an array
     //res.json(Array.from(movieMap.values()));
 });
+router.get("/seeR/id", async (req, res) => {
+    const userCookie = req.headers.cookie;
+    if(!userCookie){
+        return res.status(400).json({ error : "unauthorized user" });
+    }
+    const token = userCookie.split('=')[1];
+    const decoded = jwt.verify(token, secretKey);
+    const role = decoded.role;//admin or user
+    if (!role||role != 'user') {
+        return res.status(400).json({ error: "bad request" });
+    }
+    const {id} = req.query;
+    let query = 'SELECT * FROM review WHERE Mid = ?';
+    if(!id){
+        return res.status(400).json({ error: "Movie ID is required." });
+    }
+    db.query(query, id, async (err, results) => {
+        if (err) {
+            console.log(err);
+            return res.status(500).json({ error: err.message });
+        }
+        if (results.length === 0) {
+            return res.status(404).json({ message: "No reviews found for this movie." });
+        }
+        else{
+            return res.status(200).json(results);
+        }
+    })
+})
 
 module.exports = router;
