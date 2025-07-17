@@ -22,7 +22,7 @@ async function ping() {
         }).on("error", (e) => {
             console.error(`Ping failed: ${e.message}`);
         });
-    },1000); // every 11 minutes
+    },11*60*1000); // every 11 minutes
 
 }
 
