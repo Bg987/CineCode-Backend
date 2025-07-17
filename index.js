@@ -3,7 +3,9 @@ const express = require('express');
 const path = require('path');
 const fileUpload = require('express-fileupload');
 const cors = require('cors');
-const http = require('http');
+//const http = require("http");
+const https = require("https");
+
 
 const app = express();
 const server = http.createServer(app);
@@ -12,6 +14,17 @@ const PORT = 4000;
 const url = process.env.NODE_ENV === 'production'
     ? "https://cine-code-frontend.vercel.app"
     : "http://192.168.56.47:5100";
+
+async function ping() {
+    setInterval(() => {
+        https.get("https://cinecode-backend.onrender.com/test", (res) => {
+            console.log(`Pinged. Status code: ${res.statusCode}`);
+        }).on("error", (e) => {
+            console.error(`Ping failed: ${e.message}`);
+        });
+    },1000); // every 11 minutes
+
+}
 
 // Initialize dashboard/socket
 const { emitDashboardData } = require('./dashboard')(server);
@@ -52,11 +65,11 @@ app.use(express.json());
 app.use(fileUpload());
 
 // Routes that don’t impact real-time dashboard
-app.use('/apiLogin',emitAfterResponse, loginRoute);
-app.use('/apiLogOut',emitAfterResponse, logout);
-app.use('/apiSignup',emitAfterResponse, signupRouter);
+app.use('/apiLogin', emitAfterResponse, loginRoute);
+app.use('/apiLogOut', emitAfterResponse, logout);
+app.use('/apiSignup', emitAfterResponse, signupRouter);
 app.use('/apifAndD', emitAfterResponse, FetchAndDelete);
-app.use('/ApiApprove', emitAfterResponse,approve);
+app.use('/ApiApprove', emitAfterResponse, approve);
 app.use('/apiMovie', emitAfterResponse, AddMovie);
 // Routes that don’t need emit
 app.use('/apiSeeM', SeeMovies);
@@ -64,8 +77,10 @@ app.use('/apiSeeR', seeR);
 app.use('/apiUserReview', userReview);
 app.use('/apiForget', forgotPassword);
 app.use('/apiEdit', edit);
-app.use('/apiAddR',AddReview);
-
+app.use('/apiAddR', AddReview);
+app.get("/test",(req,res)=>{
+    res.status(200).json("ok");
+})
 // 404 fallback
 app.use((req, res) => {
     res.status(404).json('404: Resource Not Found');
@@ -73,5 +88,6 @@ app.use((req, res) => {
 
 // Server start
 server.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`);
+    ping();
+    console.log(`Server is running on port ${PORT} and ping done`);
 });

@@ -31,6 +31,7 @@
     "formidable": "^2.1.5",
     "fs": "^0.0.1-security",
     "http": "^0.0.1-security",
+    "https": "^1.0.0",
     "jsonwebtoken": "^9.0.2",
     "lodash": "^4.17.21",
     "mysql2": "^3.12.0",
