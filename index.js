@@ -88,6 +88,6 @@ app.use((req, res) => {
 
 // Server start
 server.listen(PORT, () => {
-    ping();
+    //ping();
     console.log(`Server is running on port ${PORT} and ping done`);
 });
