@@ -106,8 +106,6 @@ router.post("/AddMovie", async (req, res) => {
                         ).end(compressedImageBuffer);
                     });
 
-                    // Optional: Update image URL in DB if needed here
-
                     const logFilestr = `\nMOVIE ADD - ${MiD} ${movieData.movieName} ${movieData.language} By ${by}`;
                     if (role === "admin") {
                         log.logAdmin(logFilestr);

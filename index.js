@@ -13,7 +13,7 @@ const PORT = 4000;
 
 const url = process.env.NODE_ENV === 'production'
     ? "https://cine-code-frontend.vercel.app"
-    : "http://192.168.56.47:5100";
+    : "http://192.168.8.47:5100";
 
 async function ping() {
     setInterval(() => {
@@ -64,7 +64,7 @@ app.use(cors({
 app.use(express.json());
 app.use(fileUpload());
 
-// Routes that don’t impact real-time dashboard
+// Routes that impact real-time dashboard
 app.use('/apiLogin', emitAfterResponse, loginRoute);
 app.use('/apiLogOut', emitAfterResponse, logout);
 app.use('/apiSignup', emitAfterResponse, signupRouter);
@@ -88,6 +88,6 @@ app.use((req, res) => {
 
 // Server start
 server.listen(PORT, () => {
-    ping();
+   // ping();
     console.log(`Server is running on port ${PORT} and ping done`);
 });

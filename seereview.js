@@ -89,8 +89,6 @@ JOIN
             res.status(500).json({ error: error.message });
         }
     });
-    // Convert the map values to an array
-    //res.json(Array.from(movieMap.values()));
 });
 router.get("/seeR/id", async (req, res) => {
     const userCookie = req.headers.cookie;
