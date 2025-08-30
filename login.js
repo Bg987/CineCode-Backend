@@ -37,7 +37,7 @@ router.post("/login", (req, res) => {
                     res.cookie("token", token, {
                             httpOnly: true,
                             maxAge: 3600 * 1000 * 240000000,
-                            secure: false, // Set true for production (HTTPS required)
+                            secure: true, 
                         });
                 }
                 else{
