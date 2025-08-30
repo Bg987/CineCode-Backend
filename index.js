@@ -17,7 +17,7 @@ const url = process.env.NODE_ENV === 'production'
 
 async function ping() {
     setInterval(() => {
-        https.get("https://cinecode-backend.onrender.com/test", (res) => {
+        https.get("https://cinecode-backend-ycz5.onrender.com/test", (res) => {
             console.log(`Pinged. Status code: ${res.statusCode}`);
         }).on("error", (e) => {
             console.error(`Ping failed: ${e.message}`);
@@ -88,6 +88,6 @@ app.use((req, res) => {
 
 // Server start
 server.listen(PORT, () => {
-   // ping();
+    ping();
     console.log(`Server is running on port ${PORT} and ping done`);
 });
