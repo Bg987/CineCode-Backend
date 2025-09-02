@@ -111,13 +111,11 @@ router.post("/AddMovie", async (req, res) => {
                         log.logAdmin(logFilestr);
                         return res.status(201).json({
                             message: "Movie details saved successfully",
-                            imageUrl,
                         });
                     } else if (role === "user") {
                         log.logUser(logFilestr);
                         return res.status(201).json({
                             message: "Movie details sent to Admin for approval",
-                            imageUrl,
                         });
                     } else {
                         return res.status(500).json({ message: "Internal server error" });
