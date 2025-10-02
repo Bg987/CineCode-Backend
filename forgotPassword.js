@@ -6,12 +6,14 @@ const connection = require("./db"); // Database connection
 const log = require("./log")
 // Configure nodemailer transporter
 const transporter = nodemailer.createTransport({
-    service: "gmail", // Replace with your email service, e.g., "gmail"
-    auth: {
-        user: process.env.Email,
-        pass: process.env.Password
-    }
+  host: "smtp.sendgrid.net",
+  port: 587,
+  auth: {
+    user: "apikey", // this is fixed, literally "apikey"
+    pass: process.env.Mail_API_KEY,
+  },
 });
+
 router.post("/forgetPassword", (req, res) => {
     const { username } = req.body;
     if (!username) {

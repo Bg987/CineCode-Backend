@@ -8,16 +8,15 @@ const nodemailer = require('nodemailer');
 const connection = require('./db');
 const log = require('./log')
 const secretKey = process.env.JWT_SECRET;
-const mail = process.env.Email;
-const pass = process.env.Password;
 
-// Nodemailer configuration for sending OTP
+
 const transporter = nodemailer.createTransport({
-    service: 'gmail',
-    auth: {
-        user: mail,
-        pass: pass,
-    }
+  host: "smtp.sendgrid.net",
+  port: 587,
+  auth: {
+    user: "apikey", // this is fixed, literally "apikey"
+    pass: process.env.Mail_API_KEY,
+  },
 });
 
 // Generate a random 6-digit OTP
@@ -36,7 +35,7 @@ router.post('/register', (req, res) => {
         const otpToken = jwt.sign({ username, email, password, otp }, secretKey, { expiresIn: '5m' }); // Token expires in 5 minutes
         // Send OTP to userdata's email
         transporter.sendMail({
-            from: mail,
+            from: process.env.Email,
             to: email,
             subject: 'CineCode new user sign up OTP',
             text: `Your OTP code is ${otp}. It will expire in 5 minute.`,

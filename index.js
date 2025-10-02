@@ -13,18 +13,18 @@ const PORT = 4000;
 
 const url = process.env.NODE_ENV === 'production'
     ? "https://cine-code-frontend.vercel.app"
-    : "http://192.168.8.47:5100";
+    : "http://localhost:5100";
 
-async function ping() {
-    setInterval(() => {
-        https.get("https://cinecode-backend-ycz5.onrender.com/test", (res) => {
-            console.log(`Pinged. Status code: ${res.statusCode}`);
-        }).on("error", (e) => {
-            console.error(`Ping failed: ${e.message}`);
-        });
-    },11*60*1000); // every 11 minutes
+// async function ping() {
+//     setInterval(() => {
+//         https.get("https://cinecode-backend-ycz5.onrender.com/test", (res) => {
+//             console.log(`Pinged. Status code: ${res.statusCode}`);
+//         }).on("error", (e) => {
+//             console.error(`Ping failed: ${e.message}`);
+//         });
+//     },11*60*1000); // every 11 minutes
 
-}
+// }
 
 // Initialize dashboard/socket
 const { emitDashboardData } = require('./dashboard')(server);
