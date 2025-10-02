@@ -6,18 +6,15 @@ const { v4: uuidv4 } = require('uuid');
 const jwt = require('jsonwebtoken');
 const nodemailer = require('nodemailer');
 const connection = require('./db');
-const log = require('./log')
+const log = require('./log');
+const sgTransport = require("nodemailer-sendgrid");
 const secretKey = process.env.JWT_SECRET;
 
-
-const transporter = nodemailer.createTransport({
-  host: "smtp.sendgrid.net",
-  port: 587,
-  auth: {
-    user: "apikey", // this is fixed, literally "apikey"
-    pass: process.env.Mail_API_KEY,
-  },
-});
+const transporter = nodemailer.createTransport(
+  sgTransport({
+    apiKey: process.env.Mail_API_KEY,
+  })
+);
 
 // Generate a random 6-digit OTP
 function generateOTP() {

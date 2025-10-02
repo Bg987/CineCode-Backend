@@ -1,18 +1,16 @@
 const express = require("express");
 require("dotenv").config(); // Load environment variables
 const router = express.Router();
+const sgTransport = require("nodemailer-sendgrid");
 const nodemailer = require("nodemailer");
 const connection = require("./db"); // Database connection
 const log = require("./log")
 // Configure nodemailer transporter
-const transporter = nodemailer.createTransport({
-  host: "smtp.sendgrid.net",
-  port: 587,
-  auth: {
-    user: "apikey", // this is fixed, literally "apikey"
-    pass: process.env.Mail_API_KEY,
-  },
-});
+const transporter = nodemailer.createTransport(
+  sgTransport({
+    apiKey: process.env.Mail_API_KEY,
+  })
+);
 
 router.post("/forgetPassword", (req, res) => {
     const { username } = req.body;
