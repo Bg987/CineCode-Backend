@@ -1,7 +1,7 @@
 const prod = process.env.NODE_ENV === 'production';
 module.exports = (server) => {
     const { Server } = require('socket.io');
-    const db = require('./db');
+    const db = require('./db');44444
     const io = new Server(server, {
         cors: {
             origin: prod ? "https://cine-code-frontend.vercel.app" :"http://localhost:5100",

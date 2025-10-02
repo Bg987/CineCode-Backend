@@ -6,6 +6,7 @@ const log = require("./log");
 const jwt = require('jsonwebtoken');
 const secretKey = process.env.JWT_SECRET;
 const router = express.Router();
+
 app.use(cookieParser());
 router.get("/seeR", async (req, res) => {
     const userCookie = req.headers.cookie;
